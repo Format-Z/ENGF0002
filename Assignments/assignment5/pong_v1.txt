@@ -151,7 +151,7 @@ BALL_UPDATE messages consist of three bytes, encodes as follows:
 
 Fields:
 
- - T: 2 bit type field.  Type=BAT_UPDATE has decimal value 1.
+ - T: 2 bit type field.  Type=BALL_UPDATE has decimal value 2.
 
  - U: 2 bits, not used, but needed to maintain byte alignment.
    MUST be set to zero in this version of the protocol.

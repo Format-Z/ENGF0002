@@ -184,7 +184,7 @@ class Network():
         #print("received pacman_update")
         pos = msg[0] #position in pixels
         dir = msg[1] #direction enum
-        speed = msg[2] 
+        speed = msg[2]
         self.__controller.foreign_pacman_update(pos, dir, speed)
 
     def send_pacman_update(self, pos, dir, speed):
@@ -192,7 +192,7 @@ class Network():
         payload = [pos, dir, speed]
         msg = ["pacman", payload]
         self.send(msg)
-
+        
     def ghost_update(self, msg):
         #print("received ghost_update")
         ghostnum = msg[0]
