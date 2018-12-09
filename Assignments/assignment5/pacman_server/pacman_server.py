@@ -1,10 +1,12 @@
 import socket
-import sys
+from sys import argv, exit
 import select
 from time import sleep
+from getopt import getopt, GetoptError
 
 class Network():
-    def __init__(self, port):
+    def __init__(self):
+        self.port = 9872
         self.active_socks = []
         self.half_open_socks = {}
         self.waiting_socks = {}  #socket, indexed by password
@@ -15,16 +17,18 @@ class Network():
             self.listening_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except socket.error as err: 
             print("socket creation failed with error %s" %(err), file=self.logfile)
-            sys.exit()
+            exit()
         self.__recv_buf = bytes()
 
+    def listen(self):
+        print("listening on port", self.port)
         while True:
             try:
-                self.listening_sock.bind(('', port))
+                self.listening_sock.bind(('', self.port))
                 break
             except OSError as err:
                 print(err, file=self.logfile)
-                print("waiting, will retry in 10 seconds", file=self.logfile)
+                print("waiting, will retry in 10 seconds")
                 sleep(10)
   
         # put the socket into listening mode 
@@ -32,6 +36,19 @@ class Network():
         print("listening for incoming connection...", file=self.logfile)
         self.active_socks.append(self.listening_sock)
 
+    def parse_args(self, argv):
+        try:
+            if "pacman_server.py" in argv[0]:
+                opts, args = getopt(argv[1:], "p:", ["port="])
+            else:
+                opts, args = getopt(argv, "p:", ["port="])
+        except GetoptError:
+            self.usage()
+        for opt, arg in opts:
+            if opt in ("-p", "--port"):
+                self.port = int(arg)
+            else:
+                self.usage()
 
     def accept_connection(self):
         # Establish connection from client. 
@@ -116,7 +133,9 @@ class Network():
                         pass
                     
 
-net = Network(9872)
+net = Network()
+net.parse_args(argv)
+net.listen()
 
 while True:
     net.check_for_messages()
