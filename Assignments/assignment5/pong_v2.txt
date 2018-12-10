@@ -105,7 +105,7 @@ BALL_UPDATE messages.
 INITIALIZE message format
 -------------------------
 
-INITIALIZE messages consist of five bytes, encoded as follows:
+INITIALIZE messages consist of ten bytes, encoded as follows:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -132,7 +132,7 @@ INITIALIZE messages consist of five bytes, encoded as follows:
 BAT_UPDATE message format
 -------------------------
 
-BAT_UPDATE messages consist of three bytes, encoded as follows:
+BAT_UPDATE messages consist of six bytes, encoded as follows:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -160,7 +160,7 @@ Fields:
 BALL_UPDATE message format
 --------------------------
 
-BALL_UPDATE messages consist of three bytes, encodes as follows:
+BALL_UPDATE messages consist of seven bytes, encodes as follows:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
