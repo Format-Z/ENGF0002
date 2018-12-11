@@ -104,6 +104,16 @@ class Network():
             self.active_socks.remove(sock)
             self.active_socks.remove(partner_sock)
 
+    def close_half_open_sock(self, sock):
+        print("Error: ", sock.fileno(),
+              "got a message from a waiting sock!", file=self.logfile)
+        # no idea what to do, just close it.
+        self.active_socks.remove(sock)
+        sock.close()
+        passwd = self.waiting_passwords[sock]
+        del self.waiting_passwords[sock]
+        del self.waiting_socks[passwd]
+        
     def check_for_messages(self):
         rd, wd, ed = select.select(self.active_socks, [],[])
         if not rd:
@@ -111,21 +121,19 @@ class Network():
         else:
             for sock in rd:
                 if sock is self.listening_sock:
+                    # it's a new connection
                     self.accept_connection()
                 elif sock in self.sock_pairs:
+                    # it's a message on an existing pair
                     self.relay_message(sock)
                 elif sock in self.half_open_socks:
+                    # it's a message from a connection we've not yet heard a password
                     self.receive_passwd(sock)
                 elif sock in self.waiting_passwords:
-                    print("Error: ", sock.fileno(),
-                          "got a message from a waiting sock!", file=self.logfile)
-                    # no idea what to do, just close it.
-                    self.active_socks.remove(sock)
-                    sock.close()
-                    passwd = self.waiting_passwords[sock]
-                    del self.waiting_passwords[sock]
-                    del self.waiting_socks[passwd]
+                    # it's a second message from a unpaired connection
+                    self.close_half_open_sock(sock)
                 else:
+                    # we've no idea what happened!
                     print("Got a stray socket!", sock, file=self.logfile)
                     try:
                         sock.close()

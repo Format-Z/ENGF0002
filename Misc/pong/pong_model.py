@@ -542,7 +542,7 @@ class DumbBotPlayer(AbstractPlayer):
             return
         # skip if ball is far away
         ball_distance = self.bar.get_central_point().distance(ball.get_position())
-        if ball_distance > self.model.get_canvas_width()/4:
+        if ball_distance > self.model.get_canvas_width()/3:
             return
         # otherwise, try to match ball's position
         if self.bar.get_ypos() - self.bar.get_height()/2 > ball.get_position().Y:
